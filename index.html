@@ -306,19 +306,30 @@ function drawWheel(rotation) {
     // Text
     ctx.save();
     const midAngle = (start + end) / 2;
-    ctx.translate(cx, cy);
-    ctx.rotate(midAngle);
-    ctx.textAlign = 'right';
-    ctx.fillStyle = arc.textColor;
-    const arcSpan = end - start;
-    const fontSize = arcSpan > 0.6 ? 13 : arcSpan > 0.35 ? 11 : 9;
-    ctx.font = `bold ${fontSize}px Nunito, sans-serif`;
-    const lines = arc.label.split('\n');
-    const lineH = fontSize * 1.3;
-    const totalH = lines.length * lineH;
-    lines.forEach((line, i) => {
-      ctx.fillText(line, R - 10, -totalH / 2 + i * lineH + lineH / 2);
-    });
+   ctx.translate(cx, cy);
+ctx.rotate(midAngle);
+ctx.textAlign = 'center';      // Centre horizontalement par rapport au point d'ancrage
+ctx.textBaseline = 'middle';   // Centre verticalement par rapport au point d'ancrage
+ctx.fillStyle = arc.textColor;
+
+const arcSpan = end - start;
+const fontSize = arcSpan > 0.6 ? 13 : arcSpan > 0.35 ? 11 : 9;
+ctx.font = `bold ${fontSize}px Nunito, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+
+const lines = arc.label.split('\n');
+const lineH = fontSize * 1.3;
+
+// Calcul de la position de départ pour que tout le bloc de texte soit centré
+const totalH = lines.length * lineH;
+
+// Position X : on place le texte au milieu du rayon de la roue (R / 2)
+const textX = R * 0.55; 
+
+lines.forEach((line, i) => {
+  // Calcul de la hauteur de chaque ligne pour un centrage vertical parfait
+  const textY = -totalH / 2 + (i * lineH) + (lineH / 2);
+  ctx.fillText(line, textX, textY);
+});
     ctx.restore();
   }
 
